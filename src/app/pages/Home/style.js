@@ -18,18 +18,18 @@ export const MainContainer = styled(Container)`
 `;
 
 export const MainCard = styled(Card)`
-`
+`;
 
 export const MainCardContent = styled(CardContent)`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-`
+`;
 
 export const MainCardActions = styled(CardActions)`
     justify-content: flex-end;
     .backButton {
         margin-right: 5px;
     }
-`
+`;

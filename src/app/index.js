@@ -12,9 +12,9 @@ const rootEl = document.getElementById('app');
 
 ReactDOM.render(
   <Provider store={store}>
-     <BrowserRouter>
-       <App />
-     </BrowserRouter>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   rootEl,
 );

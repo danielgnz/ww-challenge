@@ -3,23 +3,23 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 // import * as moment from 'moment';
 import UserActionTypes from './user.types';
 
-import { 
-    changeStartDate, 
-    changePersonalAllowance, 
-    // fetchNiResultsSuccess, 
-    // fetchNiResultsFailure, 
+import {
+    changeStartDate,
+    changePersonalAllowance,
+    // fetchNiResultsSuccess,
+    // fetchNiResultsFailure,
 } from './user.actions';
 
 export function* changeDate(date) {
-    yield put(
+  yield put(
         changeStartDate(date)
-    )
+    );
 }
 
 export function* changeAllowance(allowance) {
-    yield put(
+  yield put(
         changePersonalAllowance(allowance)
-    )
+    );
 }
 
 // BUG: function doesn't send fetchNiResultSuccess / fetchNiResultFailure to the reducer
@@ -45,17 +45,17 @@ export function* changeAllowance(allowance) {
 // }
 
 export function* onChangeDate() {
-    takeLatest(
+  takeLatest(
         UserActionTypes.CHANGE_START_DATE,
         changeDate
-    )
+    );
 }
 
 export function* onChangeAllowance() {
-    takeLatest(
+  takeLatest(
         UserActionTypes.CHANGE_PERSONAL_ALLOWANCE,
         changeAllowance
-    )
+    );
 }
 
 // BUG: watcher doesn't forward the action to the reducer
@@ -68,9 +68,9 @@ export function* onChangeAllowance() {
 // }
 
 export function* userSagas() {
-    yield all([
-        call(onChangeDate),
-        call(onChangeAllowance),
+  yield all([
+    call(onChangeDate),
+    call(onChangeAllowance),
         // call(onFetchResultsStart),
-    ])
+  ]);
 }
