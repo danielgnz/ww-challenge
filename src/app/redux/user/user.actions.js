@@ -10,9 +10,9 @@ export const changePersonalAllowance = (allowance) => ({
     payload: allowance,
 });
 
-export const fetchNiResultsStart = (dateAndAllowance) => ({
+export const fetchNiResultsStart = (data) => ({
     type: UserActionTypes.FETCH_NI_RESULTS_START,
-    payload: dateAndAllowance,
+    payload: data,
 });
 
 export const fetchNiResultsSuccess = (results) => ({
@@ -24,3 +24,7 @@ export const fetchNiResultsFailure = (error) => ({
     type: UserActionTypes.FETCH_NI_RESULTS_FAILURE,
     payload: error,
 });
+
+export const resetData = () => ({
+    type: UserActionTypes.RESET_DATA,
+})

@@ -6,6 +6,7 @@ const UserActionTypes = {
     FETCH_NI_RESULTS_SUCCESS: 'FETCH_NI_RESULTS_SUCCESS',
     FETCH_NI_RESULTS_FAILURE: 'FETCH_NI_RESULTS_FAILURE',
 
+    RESET_DATA: 'RESET_DATA',
 }
 
 export default UserActionTypes;

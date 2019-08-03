@@ -1,9 +1,14 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
-import axios from 'axios';
-import * as moment from 'moment';
+// import axios from 'axios';
+// import * as moment from 'moment';
 import UserActionTypes from './user.types';
 
-import { changeStartDate, changePersonalAllowance } from './user.actions';
+import { 
+    changeStartDate, 
+    changePersonalAllowance, 
+    // fetchNiResultsSuccess, 
+    // fetchNiResultsFailure 
+} from './user.actions';
 
 export function* changeDate(date) {
     yield put(
@@ -17,25 +22,27 @@ export function* changeAllowance(allowance) {
     )
 }
 
-export function* fetchResultsAsync({ payload: { date, allowance }}) {
-    try {
-        const dateString = moment(date).format('YYYY-MM-DD');
-        const options = {
-            headers: {
-                'x-run-date': dateString,
-            }
-        };
-        const response = yield axios.post('/v1/national-insurance', { income: allowance }, options);
-        yield put (
-            fetchNiResultsSuccess(response.data)
-        )
+// BUG: function doesn't send fetchNiResultSuccess / fetchNiResultFailure to the reducer
 
-    } catch(error) {
-        yield put (
-            fetchNiResultsFailure(error)
-        )
-    }
-}
+// export function* fetchResultsAsync({ payload: { date, allowance }}) {
+//     try {
+//         const dateString = moment(date).format('YYYY-MM-DD');
+//         const options = {
+//             headers: {
+//                 'x-run-date': dateString,
+//             }
+//         };
+//         const response = yield axios.post('/v1/national-insurance', { income: allowance }, options);
+//         yield put (
+//             fetchNiResultsSuccess(response.data)
+//         )
+
+//     } catch(error) {
+//         yield put (
+//             fetchNiResultsFailure(error)
+//         )
+//     }
+// }
 
 export function* onChangeDate() {
     takeLatest(
@@ -51,17 +58,19 @@ export function* onChangeAllowance() {
     )
 }
 
-export function* onFetchNiRequest() {
-    takeLatest(
-        UserActionTypes.FETCH_NI_RESULTS_START,
-        fetchResultsAsync
-    )
-}
+// BUG: watcher doesn't forward the action to the reducer
+
+// export function* onFetchResultsStart() {
+//     takeLatest(
+//         UserActionTypes.FETCH_NI_RESULTS_START,
+//         fetchResultsAsync
+//     )
+// }
 
 export function* userSagas() {
     yield all([
         call(onChangeDate),
         call(onChangeAllowance),
-        call(onFetchNiRequest),
+        // call(onFetchResultsStart),
     ])
 }

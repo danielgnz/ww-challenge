@@ -1,9 +1,12 @@
 import UserActionTypes from "./user.types";
+import { startFetchNi } from './user.utils';
 
 const INITIAL_STATE = {
     startDate: new Date(Date.UTC(2018, 4)),
     personalAllowance: 30000,
+    currency: '£',
     isRequestPending: false, 
+    niContributions: [],
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -19,6 +22,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 personalAllowance: action.payload
             };
         case UserActionTypes.FETCH_NI_RESULTS_START:
+            startFetchNi(action.payload);
             return {
                 ...state,
                 isRequestPending: true,
@@ -26,7 +30,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         case UserActionTypes.FETCH_NI_RESULTS_SUCCESS:
             return {
                 ...state,
-                ni: action.payload,
+                niContributions: state.niContributions.concat(action.payload),
                 isRequestPending: false,
             };
         case UserActionTypes.FETCH_NI_RESULTS_FAILURE:
@@ -35,6 +39,8 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload,
                 isRequestPending: false,
             };
+        case UserActionTypes.RESET_DATA:
+            return INITIAL_STATE;
         default:
             return state;
     }

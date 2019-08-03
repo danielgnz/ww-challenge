@@ -7,9 +7,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MenuAppBar from '../../components/MenuAppBar';
 import DatePicker from '../../components/DatePicker';
 import AmountInputField from '../../components/AmountInputField';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
-import { selectStartDate, selectPersonalAllowance } from '../../redux/user/user.selectors';
-import { fetchNiResultsStart } from '../../redux/user/user.actions';
+import { selectStartDate, 
+        selectPersonalAllowance, 
+        selectNI,
+        selectCurrency,
+        selectRequestStatus,
+} from '../../redux/user/user.selectors';
+
+import { fetchNiResultsStart, resetData } from '../../redux/user/user.actions';
 
 import { 
     MainContainer,
@@ -40,7 +47,17 @@ function getQuestions() {
     ];
 }
 
-const Home = ({ startDate, personalAllowance, fetchResultsAsync }) => {
+const Home = (props) => {
+    const { 
+        startDate, 
+        personalAllowance, 
+        fetchResultsAsync, 
+        resetState, 
+        currency, 
+        NIContributions, 
+        isRequestPending 
+    } = props;
+
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
     const questions = getQuestions();
@@ -53,11 +70,19 @@ const Home = ({ startDate, personalAllowance, fetchResultsAsync }) => {
       }
     
     function handleBack() {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
+        setActiveStep(prevActiveStep => prevActiveStep - 1);
     }
 
     function handleReset() {
-    setActiveStep(0);
+        setActiveStep(0);
+        resetState()
+    }
+
+    function formatYear(date) {
+        const year = date.getFullYear();
+        const nextYear = (year + 1).toString();
+
+        return `${year.toString()}/${nextYear.slice(nextYear.length - 2)}`;
     }
 
     return (
@@ -70,24 +95,32 @@ const Home = ({ startDate, personalAllowance, fetchResultsAsync }) => {
                 </h1>
                 <MainCard>
                     <MainCardContent>
-                        {
-                            activeStep === steps.length ? (
-                                <div>
-                                    <h3>Results</h3>
-                                    <p>Date chosen: { startDate.toString() }</p>
-                                    <p>Personal Allowance: { personalAllowance }</p>
-                                </div>
-                            )
-                            : (
-                                <div>
-                                    <p>In order for us to provide you the best results, please answer to a few questions.</p>
-                                    <h2>{questions[activeStep]}</h2>
-                                    {
-                                        getStepContent(activeStep)
-                                    }
-                                </div>
-                            )
-                        }
+                        <div>
+                            {
+                                activeStep === steps.length ? (
+                                    isRequestPending ? (
+                                        <h2>Loading...</h2>
+                                    ) : (
+                                        <ErrorBoundary>
+                                            <h3>Results</h3>
+                                            <p>Contributions for the year <span style={{fontWeight: 'bold'}}>{
+                                                    formatYear(startDate)
+                                                }</span>: {currency}{ NIContributions[0].ni }
+                                            </p>
+                                            <p>Personal Allowance: { personalAllowance }</p>
+                                        </ErrorBoundary>
+                                    )
+                                ) : (
+                                    <React.Fragment>
+                                        <p>In order for us to provide you the best results, please answer to a few questions.</p>
+                                        <h2>{questions[activeStep]}</h2>
+                                        {
+                                            getStepContent(activeStep)
+                                        }
+                                    </React.Fragment>
+                                )
+                            }
+                        </div>
                     </MainCardContent>
                     <MainCardActions>
                         {
@@ -119,10 +152,14 @@ const Home = ({ startDate, personalAllowance, fetchResultsAsync }) => {
 const mapStateToProps = createStructuredSelector({
     startDate: selectStartDate,
     personalAllowance: selectPersonalAllowance,
+    currency: selectCurrency,
+    NIContributions: selectNI,
+    isRequestPending: selectRequestStatus,
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchResultsAsync: (date, allowance) => dispatch(fetchNiResultsStart({ date, allowance })),
+    fetchResultsAsync: (date, allowance) => dispatch(fetchNiResultsStart({ dispatch, date, allowance })),
+    resetState: () => dispatch(resetData()),
 })
 
 

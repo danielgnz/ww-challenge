@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const NumberFormatCustom = (props) => {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}

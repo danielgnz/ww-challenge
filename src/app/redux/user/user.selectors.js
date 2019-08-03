@@ -11,3 +11,19 @@ export const selectPersonalAllowance = createSelector(
     [selectUser],
     (user) => user.personalAllowance
 );
+
+export const selectCurrency = createSelector(
+    [selectUser],
+    (user) => user.currency
+);
+
+export const selectNI = createSelector(
+    [selectUser],
+    (user) => user.niContributions
+);
+
+export const selectRequestStatus = createSelector(
+    [selectUser],
+    (user) => user.isRequestPending
+)
+
