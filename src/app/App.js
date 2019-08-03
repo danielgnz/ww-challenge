@@ -1,22 +1,10 @@
-/** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
+import React from 'react';
+import { Route } from 'react-router-dom';
 
-const App = ({ store }) =>
-  <Provider store={store}>
-    <p
-      css={css`
-        font-size: 100px;
-      `}
-    >
-      Your app here
-    </p>
-  </Provider>;
+import Home from './pages/Home';
 
-App.propTypes = {
-  store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-};
+const App = () => (
+  <Route exact path="/" component={Home} />
+);
 
 export default App;

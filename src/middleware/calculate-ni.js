@@ -5,5 +5,6 @@ module.exports = (req, res) => {
   res.send({
     income: req.income,
     ni: nationalInsurance(date)(req.income),
+    date,
   });
 };
