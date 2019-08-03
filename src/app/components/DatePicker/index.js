@@ -29,7 +29,7 @@ export default connect(
             views={["year", "month"]}
             helperText="Earliest year available: 2018"
             minDate={new Date("2018-04-06")}
-            maxDate={new Date("2020-04-06")}
+            maxDate={Date.now()}
             value={startDate}
             onChange={changeDate}
           />

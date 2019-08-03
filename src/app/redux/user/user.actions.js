@@ -27,4 +27,4 @@ export const fetchNiResultsFailure = (error) => ({
 
 export const resetData = () => ({
     type: UserActionTypes.RESET_DATA,
-})
+});

@@ -7,7 +7,7 @@ import {
     changeStartDate, 
     changePersonalAllowance, 
     // fetchNiResultsSuccess, 
-    // fetchNiResultsFailure 
+    // fetchNiResultsFailure, 
 } from './user.actions';
 
 export function* changeDate(date) {

@@ -17,7 +17,7 @@ export const selectCurrency = createSelector(
     (user) => user.currency
 );
 
-export const selectNI = createSelector(
+export const selectNIContributions = createSelector(
     [selectUser],
     (user) => user.niContributions
 );
@@ -25,5 +25,5 @@ export const selectNI = createSelector(
 export const selectRequestStatus = createSelector(
     [selectUser],
     (user) => user.isRequestPending
-)
+);
 

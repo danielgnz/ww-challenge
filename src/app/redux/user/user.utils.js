@@ -39,5 +39,8 @@ export const startFetchNi = ({ dispatch, date, allowance }) => {
 
     axios.all(fetchRequests)
         .then(data => dispatch(fetchNiResultsSuccess(data)))
-        .catch(error => dispatch(fetchNiResultsFailure(error)));
+        .catch(error => {
+            dispatch(fetchNiResultsFailure(error));
+            setTimeout(() => alert('ERROR getting results. Try again with a different date'));
+        });
 }

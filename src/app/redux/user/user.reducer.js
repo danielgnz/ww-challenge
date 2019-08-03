@@ -6,7 +6,11 @@ const INITIAL_STATE = {
     personalAllowance: 30000,
     currency: '£',
     isRequestPending: false, 
-    niContributions: [],
+    niContributions: [{
+        income: 700,
+        date: '2018-04-06',
+        ni: 0,
+    }],
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -30,7 +34,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         case UserActionTypes.FETCH_NI_RESULTS_SUCCESS:
             return {
                 ...state,
-                niContributions: state.niContributions.concat(action.payload),
+                niContributions: [].concat(action.payload),
                 isRequestPending: false,
             };
         case UserActionTypes.FETCH_NI_RESULTS_FAILURE:
@@ -39,6 +43,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload,
                 isRequestPending: false,
             };
+       
         case UserActionTypes.RESET_DATA:
             return INITIAL_STATE;
         default:

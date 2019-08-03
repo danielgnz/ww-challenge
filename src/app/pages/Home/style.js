@@ -8,6 +8,13 @@ export const MainContainer = styled(Container)`
     .title {
         text-align: center;
     }
+    
+    .resetButton {
+        display: flex;
+        justify-content: center;
+        margin-top: .5rem;
+        width: 100%;
+    }
 `;
 
 export const MainCard = styled(Card)`

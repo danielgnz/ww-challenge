@@ -8,12 +8,13 @@ import MenuAppBar from '../../components/MenuAppBar';
 import DatePicker from '../../components/DatePicker';
 import AmountInputField from '../../components/AmountInputField';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import ResultsTable from '../../components/ResultsTable';
 
 import { selectStartDate, 
         selectPersonalAllowance, 
-        selectNI,
         selectCurrency,
         selectRequestStatus,
+        selectNIContributions,
 } from '../../redux/user/user.selectors';
 
 import { fetchNiResultsStart, resetData } from '../../redux/user/user.actions';
@@ -78,13 +79,6 @@ const Home = (props) => {
         resetState()
     }
 
-    function formatYear(date) {
-        const year = date.getFullYear();
-        const nextYear = (year + 1).toString();
-
-        return `${year.toString()}/${nextYear.slice(nextYear.length - 2)}`;
-    }
-
     return (
         <React.Fragment>
             <MenuAppBar />
@@ -93,57 +87,42 @@ const Home = (props) => {
                 <h1 className="title">
                     This app allows you to compare your national insurance contributions
                 </h1>
-                <MainCard>
-                    <MainCardContent>
-                        <div>
-                            {
-                                activeStep === steps.length ? (
-                                    isRequestPending ? (
-                                        <h2>Loading...</h2>
-                                    ) : (
-                                        <ErrorBoundary>
-                                            <h3>Results</h3>
-                                            <p>Contributions for the year <span style={{fontWeight: 'bold'}}>{
-                                                    formatYear(startDate)
-                                                }</span>: {currency}{ NIContributions[0].ni }
-                                            </p>
-                                            <p>Personal Allowance: { personalAllowance }</p>
-                                        </ErrorBoundary>
-                                    )
-                                ) : (
-                                    <React.Fragment>
-                                        <p>In order for us to provide you the best results, please answer to a few questions.</p>
-                                        <h2>{questions[activeStep]}</h2>
-                                        {
-                                            getStepContent(activeStep)
-                                        }
-                                    </React.Fragment>
-                                )
-                            }
-                        </div>
-                    </MainCardContent>
-                    <MainCardActions>
-                        {
-                            activeStep === steps.length ? (
-                                <Button onClick={handleReset}>Reset</Button>
-                            ) : (
-                                <React.Fragment>
-                                    <Button
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        className="backButton"
-                                    >
+                {
+                     activeStep === steps.length ? (
+                        isRequestPending ? (
+                            <h2>Loading...</h2>
+                        ) : (
+                            <ErrorBoundary>
+                                <ResultsTable data={NIContributions} />
+                                <div className="resetButton">
+                                    <Button variant="contained" color="primary" onClick={handleReset}>Reset</Button>
+                                </div>
+                            </ErrorBoundary>
+                        )
+                    ) : (
+                        <MainCard>
+                            <MainCardContent>
+                                <p>In order for us to provide you the best results, please answer to a few questions.</p>
+                                <h2>{questions[activeStep]}</h2>
+                                {
+                                    getStepContent(activeStep)
+                                }
+                            </MainCardContent>
+                            <MainCardActions>
+                                <Button
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    className="backButton"
+                                >
                                     Back
-                                    </Button>
-                                    <Button variant="contained" color="primary" onClick={handleNext}>
-                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                    </Button>
-                                </React.Fragment>
-                            )
-                        }
-                    </MainCardActions>
-                </MainCard>
-                
+                                </Button>
+                                <Button variant="contained" color="primary" onClick={handleNext}>
+                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                </Button>
+                            </MainCardActions>
+                        </MainCard>
+                    )
+                }
             </MainContainer> 
         </React.Fragment>
     )
@@ -153,7 +132,7 @@ const mapStateToProps = createStructuredSelector({
     startDate: selectStartDate,
     personalAllowance: selectPersonalAllowance,
     currency: selectCurrency,
-    NIContributions: selectNI,
+    NIContributions: selectNIContributions,
     isRequestPending: selectRequestStatus,
 });
 
